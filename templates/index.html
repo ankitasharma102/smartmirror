@@ -27,7 +27,7 @@
 			}
 			.notSohuuuuuuuge {
 				font-size: 40px;
-				float: right;
+				float: left;
 			}
 			.notifications-container
 			{
@@ -51,13 +51,26 @@
 				font-size: 22px;
 			}
 			.noti_text {
-				font-size: 15px;
+				font-size: 14px;
 			}
 			.noti_appName {
-				font-size: 8px;
+				font-size: 12px;
 			}
 			.ampm {
 				font-size: 20px;
+			}
+			.date{
+				font-size: 20px;
+			    position: absolute;
+			    right: 0px;
+			    padding-top: 30px;
+			    /* text-align: right; */
+			}
+			.day{
+				    font-size: 25px;
+				    position: absolute;
+				    right: 0px;
+}
 			}
 
 		</style>
@@ -70,6 +83,11 @@
 		<div class="time">
 			<span class="timecontainer huuuuuuuge"></span>
 			<span class="ampm"></span>
+			<p><span class="day"></span></p>
+			<p><span class="date"></span></p>
+			
+			
+			
 		</div>
 		<div class="notifications-container">
 				<div class="rows">
@@ -122,9 +140,33 @@
 				$(".timecontainer").html(time);
 				$(".ampm").html(ampm);
 			}
+			function displayDate(){
+				var d = new Date();
+				
+				var monthNames = ["January", "February", "March", "April", "May", "June","July", "August", "September", "October", "November", "December"];
+				
+				var month = monthNames[d.getMonth()];
+				
+				var day = d.getDate();
+
+
+				var date = (day<10 ? '0' : '') + day+' ' + month+ ' '+d.getFullYear();
+				$(".date").html(date);
+			}
+			function displayDay(){
+				var d = new Date();
+				var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+				var day = dayNames[d.getDay()];
+				$(".day").html(day);
+			}
 			displayTime();
+			displayDate();
+			displayDay();
 			setInterval(displayTime, 30000);
+			setInterval(displayDate,43200000);
+			setInterval(displayDay,43200000);
 			setInterval(getNoti, 2000);
+
 		</script>
 	</body>
 </html>
