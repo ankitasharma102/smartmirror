@@ -109,8 +109,12 @@
 					//$("#noti").html(data);
 					data = $.parseJSON(data);
 					$(".notifications").html('<hr>');
+					var count=0;
 					$.each(data, function(index, ele) {
 						//console.log(ele);
+						if(count>5)
+							return false;
+						count=count+1;
 						var title = "<div class='noti_title'>"+ele[0]+"</div>";
 						var text = "<div class='noti_text'>"+ele[1]+"</div>";
 						var appName = "<div class='noti_appName'>"+ele[2]+"</div>";
