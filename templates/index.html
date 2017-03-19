@@ -1,0 +1,130 @@
+<html>
+	<head>
+		<title>
+			WEATHER!
+		</title>
+		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300" rel="stylesheet">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+		<style type="text/css">
+			body {
+				background: rgb(0,0,0);
+				color: white;
+				font-family: 'Open Sans', sans-serif;
+				padding-top: 20px;
+				padding-left: 20px;
+				padding-right: 20px;
+				overflow: hidden;
+
+			}
+			.weather
+			{
+				position: absolute;
+				top: 30px;
+				left: 30px;
+			}
+			.huuuuuuuge {
+				font-size: 100px;
+			}
+			.notSohuuuuuuuge {
+				font-size: 40px;
+				float: right;
+			}
+			.notifications-container
+			{
+				position: absolute;
+				bottom: 0px;
+				width: 100%;
+			}
+			.degreeCel {
+				font-size: 30px;
+				vertical-align: text-top;
+				margin-top: 10%;
+				display: inline-block;
+			}
+			.time
+			{
+				position: absolute;
+				top: 30px;
+				right: 30px;
+			}
+			.noti_title {
+				font-size: 22px;
+			}
+			.noti_text {
+				font-size: 15px;
+			}
+			.noti_appName {
+				font-size: 8px;
+			}
+			.ampm {
+				font-size: 20px;
+			}
+
+		</style>
+	</head>
+	<body>
+		<div class="weather huuuuuuuge">
+			<div class="temp">{{temp}}<span class="degreeCel">°C</span></div>
+			<div class="desc notSohuuuuuuuge">{{desc}}</div>
+		</div>
+		<div class="time">
+			<span class="timecontainer huuuuuuuge"></span>
+			<span class="ampm"></span>
+		</div>
+		<div class="notifications-container">
+				<div class="rows">
+					<div class="col-md-4 col-md-offset-4">
+						<div class="notifications">
+							<div class="noti_appName"></div>
+							<div class="noti_title"></div>
+							<div class="noti_text"></div>
+						</div>
+					</div>
+				</div>
+		</div>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script>
+			function getNoti()
+			{
+				$.get( "/getNoti", function(data) {
+					console.log(data);
+					//$("#noti").html(data);
+					data = $.parseJSON(data);
+					$(".notifications").html('<hr>');
+					$.each(data, function(index, ele) {
+						//console.log(ele);
+						var title = "<div class='noti_title'>"+ele[0]+"</div>";
+						var text = "<div class='noti_text'>"+ele[1]+"</div>";
+						var appName = "<div class='noti_appName'>"+ele[2]+"</div>";
+						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
+					});
+				});
+			}
+			function displayTime()
+			{
+				var dt = new Date();
+				var hours = dt.getHours();
+				var ampm = "AM";
+				if(hours==12)
+					ampm = "PM";
+				if(hours == 0)
+					hours = 12;
+				if(hours > 12)
+				{
+					hours = hours-12;
+					ampm = "PM";
+				}
+				if(dt.getMinutes() < 10)
+					var time = hours + ":0" + dt.getMinutes();
+				else
+					var time = hours + ":" + dt.getMinutes();
+
+				$(".timecontainer").html(time);
+				$(".ampm").html(ampm);
+			}
+			displayTime();
+			setInterval(displayTime, 30000);
+			setInterval(getNoti, 2000);
+		</script>
+	</body>
+</html>
