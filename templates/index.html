@@ -100,12 +100,14 @@
 					</div>
 				</div>
 		</div>
+		    <script src="https://cdn.socket.io/socket.io-1.2.0.js"></script>
+
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>
 			function getNoti()
 			{
 				$.get( "/getNoti", function(data) {
-					console.log(data);
+					//console.log(data);
 					//$("#noti").html(data);
 					data = $.parseJSON(data);
 					$(".notifications").html('<hr>');
@@ -157,15 +159,34 @@
 				var date = (day<10 ? '0' : '') + day+' ' + month+ ' '+d.getFullYear();
 				$(".date").html(date);
 			}
+			function checkIfPhotoClicked()
+			{
+				$.get( "/capturedornah", function(data) {
+					console.log(data);
+					window.picID = data;
+				});
+			}
 			function displayDay(){
 				var d = new Date();
 				var dayNames = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
 				var day = dayNames[d.getDay()];
 				$(".day").html(day);
 			}
+			var socket = io("http://ootoday-node.herokuapp.com/");
+			socket.on("like", function(id) {
+				if(id == window.picID) {
+					window.like += 1;
+					console.log("Like +1");
+				}
+			});
+			socket.on("comment", function(id, comment){
+				if(id == window.picID)
+					console.log(comment);
+			});
 			displayTime();
 			displayDate();
 			displayDay();
+			setInterval(checkIfPhotoClicked, 3000);
 			setInterval(displayTime, 30000);
 			setInterval(displayDate,43200000);
 			setInterval(displayDay,43200000);

@@ -4,6 +4,8 @@ from weather import getweather
 import pickle
 import json
 import math
+import os
+import requests
 
 app = Flask(__name__)
 
@@ -40,5 +42,25 @@ def getNoti():
 	notifications = pickle.load(open("notifications.pickle","rb"))
 	json_noti = json.dumps(notifications)
 	return json_noti
+
+@app.route("/capture")
+def capture():
+	os.system('streamer -f jpeg -o image.jpeg') #replace with Picam command
+	w = getweather("DELHI", "cbbe618c3e4f5c2be6ca3e7c4efc8e0d")
+	files={'file1':open('image.jpeg', 'rb')}
+	d,t = w.descntemp();
+	r=requests.post('http://localhost/ootoday/uploadnew.php',data={'weather':d}, files = files)
+	id=r.json()['id']
+	pickle.dump(id,open("id.pickle",'wb'))
+	return "capture stored"
+
+@app.route("/capturedornah")	
+def checkcapture():
+	if os.path.isfile("id.pickle"):
+		id=pickle.load(open("id.pickle",'rb'))
+		return id
+	else:
+		return "Not Really."
+	
 
 app.run(host="0.0.0.0", debug=True)
