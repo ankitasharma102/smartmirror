@@ -116,7 +116,7 @@
 					var count=0;
 					$.each(data, function(index, ele) {
 						//console.log(ele);
-						if(count>5)
+						if(count>4)
 							return false;
 						count=count+1;
 						var title = "<div class='noti_title'>"+ele[0]+"</div>";
@@ -130,17 +130,18 @@
 						var appName = "<div class='noti_appName'></div>";
 						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
 					});
-					if(window.picID.length > 25)
-					{
+					
 						var title = "<div class='noti_title'>"+likes+" Likes on your last outfit.</div>";
 						var text = "<div class='noti_text'>Ootoday</div>";
 						var appName = "<div class='noti_appName'></div>";
 						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
-					}
+					
 				});
 			}
 			function addComment(com)
 			{
+				if(comments.length>3)
+					comments.pop();
 				comments.push(com);
 			}
 			function newLike()
@@ -182,11 +183,16 @@
 				var date = (day<10 ? '0' : '') + day+' ' + month+ ' '+d.getFullYear();
 				$(".date").html(date);
 			}
+
 			function checkIfPhotoClicked()
 			{
 				$.get( "/capturedornah", function(data) {
 					console.log(data);
-					window.picID = data;
+					if(window.picID!= data){
+						likes=0;
+						comments=[];
+					}
+					window.picId=data;
 				});
 			}
 			function displayDay(){
