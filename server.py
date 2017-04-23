@@ -49,7 +49,7 @@ def capture():
 	w = getweather("DELHI", "cbbe618c3e4f5c2be6ca3e7c4efc8e0d")
 	files={'file1':open('image.jpeg', 'rb')}
 	d,t = w.descntemp();
-	r=requests.post('http://localhost/ootoday/uploadnew.php',data={'weather':d}, files = files)
+	r=requests.post('http://ootoday.herokuapp.com/uploadnew.php',data={'weather':d}, files = files)
 	id=r.json()['id']
 	pickle.dump(id,open("id.pickle",'wb'))
 	return "capture stored"

@@ -172,7 +172,7 @@
 				var day = dayNames[d.getDay()];
 				$(".day").html(day);
 			}
-			var socket = io("http://ootoday-node.herokuapp.com/");
+			var socket = io("http://ootoday-node.herokuapp.com:80/");
 			socket.on("like", function(id) {
 				if(id == window.picID) {
 					window.like += 1;
