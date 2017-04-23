@@ -70,8 +70,8 @@
 				    font-size: 25px;
 				    position: absolute;
 				    right: 0px;
-}
 			}
+			
 
 		</style>
 	</head>
@@ -104,6 +104,8 @@
 
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
 		<script>
+			var comments = [];
+			var likes = 0;
 			function getNoti()
 			{
 				$.get( "/getNoti", function(data) {
@@ -122,7 +124,28 @@
 						var appName = "<div class='noti_appName'>"+ele[2]+"</div>";
 						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
 					});
+					$.each(comments, function(ind, comment) {
+						var title = "<div class='noti_title'>Comment: "+comment+"</div>";
+						var text = "<div class='noti_text'>Ootoday</div>";
+						var appName = "<div class='noti_appName'></div>";
+						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
+					});
+					if(window.picID.length > 25)
+					{
+						var title = "<div class='noti_title'>"+likes+" Likes on your last outfit.</div>";
+						var text = "<div class='noti_text'>Ootoday</div>";
+						var appName = "<div class='noti_appName'></div>";
+						$(".notifications").html($(".notifications").html()+appName+title+text+"<hr>");
+					}
 				});
+			}
+			function addComment(com)
+			{
+				comments.push(com);
+			}
+			function newLike()
+			{
+				likes++;
 			}
 			function displayTime()
 			{
@@ -176,12 +199,16 @@
 			socket.on("like", function(id) {
 				if(id == window.picID) {
 					window.like += 1;
+					newLike();
 					console.log("Like +1");
 				}
 			});
 			socket.on("comment", function(id, comment){
 				if(id == window.picID)
+				{
 					console.log(comment);
+					addComment(comment);
+				}
 			});
 			displayTime();
 			displayDate();
